@@ -92,26 +92,30 @@ gallery.addEventListener("click", (event) => {
   if (clickedOnImage) {
     console.log(clickedOnImage);
   }
-
-  const imgOnModal = basicLightbox
-    .create(
-      `<img
+  if (!clickedOnImage) {
+    return;
+  }
+  const imgOnModal = basicLightbox.create(
+    `<img
         class="gallery-image-modal"
         src="${clickedOnImage}"
         width="1440"
       />`,
-      {
-        onShow: (imgOnModal) => {
-        imgOnModal.addEventListener("keydown", event) => {
-          if(event.key === "Escape") {
-            imgOnModal.close();
-          }
-        };
+    {
+      onShow: (imgOnModal) => {
+        document.addEventListener("keydown", onEscPress);
       },
-      onClose: (imgOnModal) => {imgOnModal.removeEventListener()},
-      }
-    );
+      onClose: (imgOnModal) => {
+        document.removeEventListener("keydown", onEscPress);
+      },
+    }
+  );
 
-    imgOnModal.show();
+  imgOnModal.show();
 
+  function onEscPress(event) {
+    if (event.key === "Escape") {
+      imgOnModal.close();
+    }
+  }
 });
